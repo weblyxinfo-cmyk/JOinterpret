@@ -4,6 +4,8 @@ import { prisma } from "@/lib/prisma";
 import Stripe from "stripe";
 import crypto from "crypto";
 
+export const dynamic = "force-dynamic";
+
 export async function POST(req: NextRequest) {
   const body = await req.text();
   const sig = req.headers.get("stripe-signature");
