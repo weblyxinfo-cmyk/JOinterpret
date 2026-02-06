@@ -1,15 +1,42 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import ScrollReveal from "@/components/ui/ScrollReveal";
+import { sanityClient } from "@/lib/sanity";
 
-const stats = [
-  { value: "11", label: "Box zápasů" },
-  { value: "1", label: "MMA zápas" },
-  { value: "10", label: "Let v UK" },
-  { value: "3", label: "Tréninkové kempy" },
-];
+type MmaStats = {
+  boxingMatches: number;
+  mmaMatches: number;
+  yearsInUK: number;
+  trainingCamps: number;
+};
+
+const fallbackStats: MmaStats = {
+  boxingMatches: 11,
+  mmaMatches: 1,
+  yearsInUK: 10,
+  trainingCamps: 3,
+};
 
 export default function MmaSection() {
+  const [mmaData, setMmaData] = useState<MmaStats>(fallbackStats);
+
+  useEffect(() => {
+    sanityClient
+      .fetch<MmaStats>(`*[_type == "mmaStats"][0] { boxingMatches, mmaMatches, yearsInUK, trainingCamps }`)
+      .then((data) => {
+        if (data) setMmaData(data);
+      })
+      .catch(() => {});
+  }, []);
+
+  const stats = [
+    { value: String(mmaData.boxingMatches), label: "Box zápasů" },
+    { value: String(mmaData.mmaMatches), label: "MMA zápas" },
+    { value: String(mmaData.yearsInUK), label: "Let v UK" },
+    { value: String(mmaData.trainingCamps), label: "Tréninkové kempy" },
+  ];
+
   return (
     <section className="bg-black text-white py-[100px] px-6 md:px-12" id="mma">
       <ScrollReveal>

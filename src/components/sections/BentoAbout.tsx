@@ -5,7 +5,7 @@ import ScrollReveal from "@/components/ui/ScrollReveal";
 const bentoCards = [
   {
     type: "image",
-    span: "col-span-2",
+    span: "md:col-span-2",
     bg: "url('https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800&q=80') center/cover",
     minH: "min-h-[300px]",
     tag: "Zpěvák & Rapper",
@@ -68,13 +68,13 @@ export default function BentoAbout() {
       </ScrollReveal>
 
       <ScrollReveal>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 auto-rows-[240px] gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 auto-rows-auto md:auto-rows-[240px] gap-4">
           {bentoCards.map((card, i) => {
             if (card.type === "image") {
               return (
                 <div
                   key={i}
-                  className={`${card.span} border border-[#ddd] p-7 relative overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] flex flex-col justify-between cursor-pointer hover:border-gold hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(0,0,0,0.08)] ${card.minH}`}
+                  className={`${card.span} border border-[#ddd] p-5 md:p-7 relative overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] flex flex-col justify-between cursor-pointer hover:border-gold hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(0,0,0,0.08)] ${card.minH}`}
                   style={{ background: card.bg }}
                 >
                   <span
@@ -90,13 +90,13 @@ export default function BentoAbout() {
               return (
                 <div
                   key={i}
-                  className="bg-black text-white border border-dark p-7 flex flex-col justify-between cursor-pointer transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-gold hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(0,0,0,0.08)]"
+                  className="bg-black text-white border border-dark p-5 md:p-7 flex flex-col justify-between cursor-pointer transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-gold hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(0,0,0,0.08)] min-h-[180px] md:min-h-0"
                 >
                   <span className="font-mono text-[0.6rem] uppercase tracking-[0.15em] opacity-50">
                     {card.tag}
                   </span>
                   <div>
-                    <div className="font-heading text-[3.5rem] font-black leading-none tracking-[-0.04em] text-gold">
+                    <div className="font-heading text-[2.5rem] md:text-[3.5rem] font-black leading-none tracking-[-0.04em] text-gold">
                       {card.number}
                     </div>
                     <p className="text-[0.85rem] opacity-70 mt-2">
@@ -111,7 +111,7 @@ export default function BentoAbout() {
               return (
                 <div
                   key={i}
-                  className="bg-gold text-black border border-gold p-7 flex flex-col justify-between cursor-pointer transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(0,0,0,0.08)]"
+                  className="bg-gold text-black border border-gold p-5 md:p-7 flex flex-col justify-between cursor-pointer transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(0,0,0,0.08)] min-h-[180px] md:min-h-0"
                 >
                   <span className="font-mono text-[0.6rem] uppercase tracking-[0.15em] text-black/50">
                     {card.tag}
@@ -131,7 +131,7 @@ export default function BentoAbout() {
             return (
               <div
                 key={i}
-                className="bg-white border border-[#ddd] p-7 relative overflow-hidden flex flex-col justify-between cursor-pointer transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-gold hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(0,0,0,0.08)] group"
+                className="bg-white border border-[#ddd] p-5 md:p-7 relative overflow-hidden flex flex-col justify-between cursor-pointer transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-gold hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(0,0,0,0.08)] group min-h-[160px] md:min-h-0"
               >
                 <span className="font-mono text-[0.6rem] uppercase tracking-[0.15em] opacity-50">
                   {card.tag}

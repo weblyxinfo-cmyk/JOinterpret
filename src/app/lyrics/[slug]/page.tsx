@@ -1,15 +1,25 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useParams } from "next/navigation";
+import { sanityClient } from "@/lib/sanity";
 
-const demoLyrics = {
-  title: "Nemůžu zapomenout",
+type LyricsDetail = {
+  songTitle: string;
+  album?: string;
+  year?: number;
+  featuredArtists?: string[];
+  lyricsText?: string[];
+  spotifyTrackId?: string;
+};
+
+const fallbackLyrics: LyricsDetail = {
+  songTitle: "Nemůžu zapomenout",
   album: "Lovestory",
   year: 2023,
-  featured: [],
-  spotifyId: "",
-  lines: [
+  featuredArtists: [],
+  lyricsText: [
     "Nemůžu zapomenout na tebe",
     "každej den se budím",
     "a přemejšlím",
@@ -26,10 +36,27 @@ const demoLyrics = {
     "na to jak jsme spolu byli",
     "naposledy zas a zas",
   ],
+  spotifyTrackId: "",
 };
 
-export default function LyricsDetail() {
+export default function LyricsDetailPage() {
+  const { slug } = useParams();
+  const [lyrics, setLyrics] = useState<LyricsDetail>(fallbackLyrics);
   const [copiedLine, setCopiedLine] = useState<number | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    sanityClient
+      .fetch<LyricsDetail>(
+        `*[_type == "lyrics" && slug.current == $slug][0] { songTitle, album, year, featuredArtists, lyricsText, spotifyTrackId }`,
+        { slug }
+      )
+      .then((data) => {
+        if (data) setLyrics(data);
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, [slug]);
 
   const shareLine = (line: string, index: number) => {
     if (!line.trim()) return;
@@ -37,6 +64,16 @@ export default function LyricsDetail() {
     setCopiedLine(index);
     setTimeout(() => setCopiedLine(null), 2000);
   };
+
+  const lines = lyrics.lyricsText || [];
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="font-mono text-sm text-gray">Načítám...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -52,11 +89,16 @@ export default function LyricsDetail() {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
           <div>
             <div className="font-mono text-[0.6rem] uppercase tracking-[0.2em] text-gold mb-2">
-              {demoLyrics.album} · {demoLyrics.year}
+              {lyrics.album} · {lyrics.year}
             </div>
             <h1 className="font-heading text-[clamp(2rem,5vw,4rem)] font-black tracking-[-0.04em]">
-              {demoLyrics.title}
+              {lyrics.songTitle}
             </h1>
+            {lyrics.featuredArtists && lyrics.featuredArtists.length > 0 && (
+              <p className="text-gray-light text-sm mt-2">
+                ft. {lyrics.featuredArtists.join(", ")}
+              </p>
+            )}
           </div>
           <div className="font-mono text-[0.65rem] text-gray">
             Klikni na řádek pro sdílení
@@ -66,7 +108,7 @@ export default function LyricsDetail() {
 
       {/* Lyrics */}
       <div className="px-6 md:px-12 pb-24 max-w-3xl">
-        {demoLyrics.lines.map((line, i) =>
+        {lines.map((line, i) =>
           line.trim() === "" ? (
             <div key={i} className="h-8" />
           ) : (
@@ -84,18 +126,30 @@ export default function LyricsDetail() {
         )}
       </div>
 
-      {/* Spotify embed placeholder */}
+      {/* Spotify embed */}
       <div className="px-6 md:px-12 pb-24">
-        <div className="bg-dark border border-[#333] p-8 max-w-3xl">
-          <div className="font-mono text-[0.6rem] uppercase tracking-wider text-gray mb-2">
-            Poslechnout na Spotify
-          </div>
-          <div className="font-heading text-lg font-bold">
-            {demoLyrics.title}
-          </div>
-          <p className="text-gray text-sm mt-2">
-            Spotify embed se zobrazí po zadání Track ID v Sanity CMS.
-          </p>
+        <div className="max-w-3xl">
+          {lyrics.spotifyTrackId ? (
+            <iframe
+              src={`https://open.spotify.com/embed/track/${lyrics.spotifyTrackId}`}
+              width="100%"
+              height="80"
+              allow="encrypted-media"
+              className="border-0"
+            />
+          ) : (
+            <div className="bg-dark border border-[#333] p-8">
+              <div className="font-mono text-[0.6rem] uppercase tracking-wider text-gray mb-2">
+                Poslechnout na Spotify
+              </div>
+              <div className="font-heading text-lg font-bold">
+                {lyrics.songTitle}
+              </div>
+              <p className="text-gray text-sm mt-2">
+                Spotify embed se zobrazí po zadání Track ID v Sanity CMS.
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>

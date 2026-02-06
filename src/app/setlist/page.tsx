@@ -17,6 +17,8 @@ const allSongs = [
 export default function SetlistPage() {
   const [selected, setSelected] = useState<string[]>([]);
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const toggleSong = (song: string) => {
     if (submitted) return;
@@ -31,8 +33,26 @@ export default function SetlistPage() {
 
   const handleSubmit = async () => {
     if (selected.length === 0) return;
-    // TODO: POST to /api/setlist
-    setSubmitted(true);
+    setLoading(true);
+    setError("");
+
+    try {
+      const res = await fetch("/api/setlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ songs: selected }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || "Chyba při odesílání.");
+      }
+
+      setSubmitted(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Chyba při odesílání.");
+    }
+    setLoading(false);
   };
 
   return (
@@ -54,6 +74,12 @@ export default function SetlistPage() {
         <p className="font-mono text-[0.7rem] text-gold mb-10">
           Vybráno: {selected.length}/5
         </p>
+
+        {error && (
+          <div className="bg-red-500/10 border border-red-500/30 text-red-600 text-sm px-4 py-3 mb-4">
+            {error}
+          </div>
+        )}
 
         {submitted ? (
           <div className="bg-white border border-[#ddd] p-12 text-center">
@@ -95,10 +121,12 @@ export default function SetlistPage() {
 
             <button
               onClick={handleSubmit}
-              disabled={selected.length === 0}
+              disabled={selected.length === 0 || loading}
               className="w-full bg-gold text-black py-4 font-heading text-[0.75rem] font-bold uppercase tracking-[0.05em] hover:bg-gold-dark transition-all disabled:opacity-30 disabled:cursor-not-allowed"
             >
-              ODESLAT HLASOVÁNÍ ({selected.length}/5)
+              {loading
+                ? "ODESÍLÁM..."
+                : `ODESLAT HLASOVÁNÍ (${selected.length}/5)`}
             </button>
           </>
         )}

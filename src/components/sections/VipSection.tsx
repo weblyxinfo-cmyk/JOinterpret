@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 
 const vipPackages = [
@@ -7,11 +8,13 @@ const vipPackages = [
     num: "01",
     title: "Meet & Greet",
     desc: "Osobní setkání před nebo po koncertě. Společná fotka, podpis a krátký rozhovor.",
+    href: "/vip/meet_greet",
   },
   {
     num: "02",
     title: "Backstage Pass",
     desc: "Exkluzivní přístup do zákulisí. Soundcheck, příprava a atmosféra, kterou vidí jen nejbližší.",
+    href: "/vip/backstage",
   },
 ];
 
@@ -35,9 +38,10 @@ export default function VipSection() {
       <ScrollReveal>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
           {vipPackages.map((pkg) => (
-            <div
+            <Link
               key={pkg.num}
-              className="bg-white border border-[#ddd] p-9 px-7 transition-all duration-500 relative hover:border-gold hover:-translate-y-1.5 hover:shadow-[0_24px_60px_rgba(0,0,0,0.06)] group"
+              href={pkg.href}
+              className="bg-white border border-[#ddd] p-9 px-7 transition-all duration-500 relative hover:border-gold hover:-translate-y-1.5 hover:shadow-[0_24px_60px_rgba(0,0,0,0.06)] group block"
             >
               <span className="absolute top-7 right-7 text-[1.2rem] opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0">
                 &rarr;
@@ -51,10 +55,10 @@ export default function VipSection() {
               <p className="text-[0.85rem] text-gray leading-[1.6] mb-6">
                 {pkg.desc}
               </p>
-              <button className="w-full bg-gold text-black py-4 font-heading text-[0.75rem] font-bold uppercase tracking-[0.05em] hover:bg-gold-dark transition-all flex items-center justify-center gap-2">
+              <span className="w-full bg-gold text-black py-4 font-heading text-[0.75rem] font-bold uppercase tracking-[0.05em] hover:bg-gold-dark transition-all flex items-center justify-center gap-2">
                 OBJEDNAT &rarr;
-              </button>
-            </div>
+              </span>
+            </Link>
           ))}
         </div>
       </ScrollReveal>

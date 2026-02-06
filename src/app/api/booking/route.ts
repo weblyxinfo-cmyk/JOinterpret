@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { sendBookingConfirmation, sendBookingNotification } from "@/lib/email";
 
 export const dynamic = "force-dynamic";
 
@@ -33,8 +36,15 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // TODO: Send auto-reply email via Resend/SendGrid
-    // TODO: Send notification to manager
+    // Send emails (non-blocking)
+    try {
+      await Promise.all([
+        sendBookingConfirmation({ name, email, type, eventDate }),
+        sendBookingNotification({ name, email, type, eventDate, location, budget, id: booking.id }),
+      ]);
+    } catch (emailErr) {
+      console.error("Email send error (non-critical):", emailErr);
+    }
 
     return NextResponse.json({ success: true, id: booking.id }, { status: 201 });
   } catch (error) {
@@ -47,6 +57,11 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET(req: NextRequest) {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return NextResponse.json({ error: "Neautorizováno." }, { status: 401 });
+  }
+
   try {
     const { searchParams } = new URL(req.url);
     const status = searchParams.get("status");

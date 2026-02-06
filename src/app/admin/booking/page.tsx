@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 
 const statusColors: Record<string, string> = {
@@ -39,10 +39,18 @@ type Booking = {
 
 export default function BookingAdmin() {
   const [filter, setFilter] = useState("ALL");
-  const [bookings] = useState<Booking[]>([]);
+  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // TODO: fetch from API on mount
-  // useEffect(() => { fetch('/api/booking').then(...) }, [])
+  useEffect(() => {
+    fetch("/api/booking")
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data)) setBookings(data);
+      })
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, []);
 
   const filtered =
     filter === "ALL" ? bookings : bookings.filter((b) => b.status === filter);
@@ -86,10 +94,14 @@ export default function BookingAdmin() {
           <span>Detail</span>
         </div>
 
-        {filtered.length === 0 ? (
+        {loading ? (
+          <div className="px-6 py-12 text-center text-gray text-sm">
+            Načítám...
+          </div>
+        ) : filtered.length === 0 ? (
           <div className="px-6 py-12 text-center text-gray text-sm">
             {bookings.length === 0
-              ? "Žádné booking requesty. Po připojení databáze se zde zobrazí."
+              ? "Žádné booking requesty."
               : "Žádné výsledky pro tento filtr."}
           </div>
         ) : (

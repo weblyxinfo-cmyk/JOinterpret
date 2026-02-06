@@ -1,19 +1,112 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import { sanityClient } from "@/lib/sanity";
 
-const photos = [
-  { title: "Press Photo 1", desc: "Hlavní promo fotka" },
-  { title: "Press Photo 2", desc: "Live performance" },
-  { title: "Press Photo 3", desc: "Studio session" },
+type EpkMaterial = {
+  _id?: string;
+  title: string;
+  type?: string;
+  description?: string;
+  downloadUrl?: string;
+};
+
+type EpkBio = {
+  _id?: string;
+  shortBio?: string;
+  longBio?: string;
+};
+
+type EpkStats = {
+  _id?: string;
+  spotifyListeners?: string;
+  videoCount?: string;
+  totalPlays?: string;
+  igFollowers?: string;
+};
+
+const fallbackPhotos: EpkMaterial[] = [
+  { title: "Press Photo 1", description: "Hlavní promo fotka", type: "photo" },
+  { title: "Press Photo 2", description: "Live performance", type: "photo" },
+  { title: "Press Photo 3", description: "Studio session", type: "photo" },
 ];
 
-const documents = [
-  { title: "Bio (CZ)", desc: "Oficiální bio v češtině", icon: "📄" },
-  { title: "Bio (EN)", desc: "Official bio in English", icon: "📄" },
-  { title: "Tech Rider", desc: "Technické požadavky", icon: "🔧" },
-  { title: "Stage Plot", desc: "Rozložení pódia", icon: "📐" },
+const fallbackDocuments: EpkMaterial[] = [
+  { title: "Bio (CZ)", description: "Oficiální bio v češtině", type: "document" },
+  { title: "Bio (EN)", description: "Official bio in English", type: "document" },
+  { title: "Tech Rider", description: "Technické požadavky", type: "document" },
+  { title: "Stage Plot", description: "Rozložení pódia", type: "document" },
 ];
+
+const fallbackShortBio =
+  "Jaroslav Oláh je český R&B zpěvák a rapper romského původu. Proslavil se účastí v SuperStar a od té doby vydal album Lovestory a řadu hitů s milionovými přehráními. Kromě hudby se věnuje boxu a MMA.";
+
+const fallbackLongBio =
+  "Jaroslav Oláh je český R&B zpěvák, rapper a fighter. Na českou hudební scénu vstoupil přes soutěž SuperStar, kde zaujal svým hlasem a charismem. Pod hlavičkou Blakkwood Records vydal album Lovestory (2023) s hity jako Nemůžu zapomenout, Hlavolam ft. Refew či Šípková Růženka. Spolupracoval s umělci jako Majself, Jakub Děkan, Daniel Cina a Lola Oláh. Strávil 10 let v Anglii, kde trénoval box. Má za sebou 11 boxerských zápasů a MMA debut.";
+
+const fallbackStats = [
+  { value: "250K+", label: "Spotify Listeners" },
+  { value: "17", label: "Videoklipů" },
+  { value: "1M+", label: "Přehrání" },
+  { value: "50K+", label: "IG Followers" },
+];
+
+const docIconMap: Record<string, string> = {
+  document: "📄",
+  rider: "🔧",
+  stageplot: "📐",
+};
 
 export default function EpkPage() {
+  const [photos, setPhotos] = useState<EpkMaterial[]>(fallbackPhotos);
+  const [documents, setDocuments] = useState<EpkMaterial[]>(fallbackDocuments);
+  const [shortBio, setShortBio] = useState(fallbackShortBio);
+  const [longBio, setLongBio] = useState(fallbackLongBio);
+  const [stats, setStats] = useState(fallbackStats);
+
+  useEffect(() => {
+    // Fetch EPK materials from Sanity
+    sanityClient
+      .fetch<EpkMaterial[]>(
+        `*[_type == "epkMaterial"] { _id, title, type, description, "downloadUrl": file.asset->url }`
+      )
+      .then((data) => {
+        if (data && data.length > 0) {
+          const photoItems = data.filter((d) => d.type === "photo");
+          const docItems = data.filter((d) => d.type !== "photo" && d.type !== "logo");
+          if (photoItems.length > 0) setPhotos(photoItems);
+          if (docItems.length > 0) setDocuments(docItems);
+        }
+      })
+      .catch(() => {});
+
+    // Fetch bio from Sanity
+    sanityClient
+      .fetch<EpkBio>(`*[_type == "epkBio"][0] { shortBio, longBio }`)
+      .then((data) => {
+        if (data?.shortBio) setShortBio(data.shortBio);
+        if (data?.longBio) setLongBio(data.longBio);
+      })
+      .catch(() => {});
+
+    // Fetch stats from Sanity
+    sanityClient
+      .fetch<EpkStats>(`*[_type == "epkStats"][0]`)
+      .then((data) => {
+        if (data) {
+          const s = [
+            { value: data.spotifyListeners || "250K+", label: "Spotify Listeners" },
+            { value: data.videoCount || "17", label: "Videoklipů" },
+            { value: data.totalPlays || "1M+", label: "Přehrání" },
+            { value: data.igFollowers || "50K+", label: "IG Followers" },
+          ];
+          setStats(s);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   return (
     <div className="min-h-screen bg-cream">
       <div className="pt-24 pb-24 px-6 md:px-12 max-w-5xl mx-auto">
@@ -40,10 +133,7 @@ export default function EpkPage() {
                 Krátké bio
               </h3>
               <p className="text-[0.9rem] leading-relaxed text-gray">
-                Jaroslav Oláh je český R&B zpěvák a rapper romského původu.
-                Proslavil se účastí v SuperStar a od té doby vydal album
-                Lovestory a řadu hitů s milionovými přehráními. Kromě hudby se
-                věnuje boxu a MMA.
+                {shortBio}
               </p>
             </div>
             <div className="bg-white border border-[#ddd] p-8">
@@ -51,13 +141,7 @@ export default function EpkPage() {
                 Dlouhé bio
               </h3>
               <p className="text-[0.9rem] leading-relaxed text-gray">
-                Jaroslav Oláh je český R&B zpěvák, rapper a fighter. Na českou
-                hudební scénu vstoupil přes soutěž SuperStar, kde zaujal svým
-                hlasem a charismem. Pod hlavičkou Blakkwood Records vydal album
-                Lovestory (2023) s hity jako Nemůžu zapomenout, Hlavolam ft.
-                Refew či Šípková Růženka. Spolupracoval s umělci jako Majself,
-                Jakub Děkan, Daniel Cina a Lola Oláh. Strávil 10 let v Anglii,
-                kde trénoval box. Má za sebou 11 boxerských zápasů a MMA debut.
+                {longBio}
               </p>
             </div>
           </div>
@@ -71,7 +155,7 @@ export default function EpkPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {photos.map((photo, i) => (
               <div
-                key={i}
+                key={photo._id || i}
                 className="bg-white border border-[#ddd] aspect-[3/4] flex items-center justify-center cursor-pointer hover:border-gold transition-colors group"
               >
                 <div className="text-center">
@@ -79,7 +163,7 @@ export default function EpkPage() {
                     📸
                   </div>
                   <p className="font-heading text-sm font-bold">{photo.title}</p>
-                  <p className="text-[0.75rem] text-gray">{photo.desc}</p>
+                  <p className="text-[0.75rem] text-gray">{photo.description}</p>
                   <span className="font-mono text-[0.6rem] text-gold mt-2 inline-block opacity-0 group-hover:opacity-100 transition-opacity">
                     &#11015; Stáhnout
                   </span>
@@ -97,14 +181,16 @@ export default function EpkPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {documents.map((doc, i) => (
               <div
-                key={i}
+                key={doc._id || i}
                 className="bg-white border border-[#ddd] p-6 cursor-pointer hover:border-gold hover:-translate-y-[2px] transition-all"
               >
-                <div className="text-2xl mb-3">{doc.icon}</div>
+                <div className="text-2xl mb-3">
+                  {docIconMap[doc.type || ""] || "📄"}
+                </div>
                 <h4 className="font-heading text-[0.85rem] font-bold">
                   {doc.title}
                 </h4>
-                <p className="text-[0.75rem] text-gray mt-1">{doc.desc}</p>
+                <p className="text-[0.75rem] text-gray mt-1">{doc.description}</p>
               </div>
             ))}
           </div>
@@ -140,12 +226,7 @@ export default function EpkPage() {
         <section className="mb-16">
           <h2 className="font-heading text-xl font-bold mb-6">Live Stats</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[
-              { value: "250K+", label: "Spotify Listeners" },
-              { value: "17", label: "Videoklipů" },
-              { value: "1M+", label: "Přehrání" },
-              { value: "50K+", label: "IG Followers" },
-            ].map((stat, i) => (
+            {stats.map((stat, i) => (
               <div key={i} className="bg-black text-white p-6">
                 <div className="font-heading text-2xl font-black text-gold">
                   {stat.value}

@@ -1,13 +1,29 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { sanityClient } from "@/lib/sanity";
 
-const packages = {
+type VipPackage = {
+  title: string;
+  description?: string;
+  price?: number;
+  includes: string[];
+};
+
+type Concert = {
+  _id: string;
+  title: string;
+  date: string;
+  venue: string;
+  city: string;
+};
+
+const fallbackPackages: Record<string, VipPackage> = {
   meet_greet: {
     title: "Meet & Greet",
-    desc: "Osobní setkání před nebo po koncertě. Společná fotka, podpis a krátký rozhovor s Járou.",
+    description: "Osobní setkání před nebo po koncertě. Společná fotka, podpis a krátký rozhovor s Járou.",
     includes: [
       "Osobní setkání (15 min)",
       "Společná fotka",
@@ -17,7 +33,7 @@ const packages = {
   },
   backstage: {
     title: "Backstage Pass",
-    desc: "Exkluzivní přístup do zákulisí. Soundcheck, příprava a atmosféra, kterou vidí jen nejbližší.",
+    description: "Exkluzivní přístup do zákulisí. Soundcheck, příprava a atmosféra, kterou vidí jen nejbližší.",
     includes: [
       "Přístup do backstage",
       "Účast na soundchecku",
@@ -32,8 +48,33 @@ const packages = {
 export default function VipDetail() {
   const params = useParams();
   const typeKey = (params.type as string) || "meet_greet";
-  const pkg = packages[typeKey as keyof typeof packages] || packages.meet_greet;
+  const [pkg, setPkg] = useState<VipPackage>(
+    fallbackPackages[typeKey] || fallbackPackages.meet_greet
+  );
+  const [concerts, setConcerts] = useState<Concert[]>([]);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    // Fetch VIP package from Sanity
+    const sanityType = typeKey === "backstage" ? "backstage" : "meet_greet";
+    sanityClient
+      .fetch<VipPackage>(
+        `*[_type == "vipPackage" && type == $type][0] { title, description, price, includes }`,
+        { type: sanityType }
+      )
+      .then((data) => {
+        if (data) setPkg(data);
+      })
+      .catch(() => {});
+
+    // Fetch concerts for dropdown
+    sanityClient
+      .fetch<Concert[]>(`*[_type == "concert" && status != "soldout"] | order(date asc) { _id, title, date, venue, city }`)
+      .then((data) => {
+        if (data && data.length > 0) setConcerts(data);
+      })
+      .catch(() => {});
+  }, [typeKey]);
 
   const handleOrder = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -84,7 +125,7 @@ export default function VipDetail() {
             <h1 className="font-heading text-[clamp(2rem,4vw,3rem)] font-black tracking-[-0.04em] mb-4">
               {pkg.title}
             </h1>
-            <p className="text-gray leading-relaxed mb-8">{pkg.desc}</p>
+            <p className="text-gray leading-relaxed mb-8">{pkg.description}</p>
 
             <h3 className="font-heading text-sm font-bold mb-4">Co zahrnuje:</h3>
             <ul className="space-y-3 mb-8">
@@ -164,15 +205,19 @@ export default function VipDetail() {
                     className="border border-[#ddd] p-3.5 px-4 text-[0.9rem] outline-none focus:border-gold transition-colors cursor-pointer"
                   >
                     <option value="">Vyberte koncert</option>
-                    <option value="lucerna-2025">
-                      15.3.2025 – Lucerna Music Bar, Praha
-                    </option>
-                    <option value="pekarna-2025">
-                      22.3.2025 – Stará Pekárna, Brno
-                    </option>
-                    <option value="olomouc-2025">
-                      19.4.2025 – Korunní Pevnůstka, Olomouc
-                    </option>
+                    {concerts.length > 0
+                      ? concerts.map((c) => (
+                          <option key={c._id} value={c._id}>
+                            {new Date(c.date).toLocaleDateString("cs-CZ")} – {c.venue}, {c.city}
+                          </option>
+                        ))
+                      : (
+                        <>
+                          <option value="lucerna-2025">15.3.2025 – Lucerna Music Bar, Praha</option>
+                          <option value="pekarna-2025">22.3.2025 – Stará Pekárna, Brno</option>
+                          <option value="olomouc-2025">19.4.2025 – Korunní Pevnůstka, Olomouc</option>
+                        </>
+                      )}
                   </select>
                 </div>
                 <div className="flex flex-col gap-1.5">

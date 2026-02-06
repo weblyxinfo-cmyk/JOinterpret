@@ -30,11 +30,28 @@ const fanCards = [
 export default function FanZone() {
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleNewsletter = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: API call
-    setSubscribed(true);
+    setLoading(true);
+    setError("");
+
+    try {
+      const res = await fetch("/api/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, source: "homepage" }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      setSubscribed(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Chyba při přihlášení.");
+    }
+    setLoading(false);
   };
 
   return (
@@ -103,10 +120,14 @@ export default function FanZone() {
               />
               <button
                 type="submit"
-                className="bg-black text-cream px-7 py-3.5 font-heading text-[0.7rem] font-bold uppercase tracking-[0.05em] hover:-translate-y-0.5 transition-all whitespace-nowrap"
+                disabled={loading}
+                className="bg-black text-cream px-7 py-3.5 font-heading text-[0.7rem] font-bold uppercase tracking-[0.05em] hover:-translate-y-0.5 transition-all whitespace-nowrap disabled:opacity-50"
               >
-                ODEBÍRAT
+                {loading ? "..." : "ODEBÍRAT"}
               </button>
+              {error && (
+                <p className="text-red-700 text-[0.75rem] mt-1">{error}</p>
+              )}
             </form>
           )}
         </div>

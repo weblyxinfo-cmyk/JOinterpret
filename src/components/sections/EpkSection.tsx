@@ -1,15 +1,43 @@
 "use client";
 
+import { useState, useEffect } from "react";
+import Link from "next/link";
 import ScrollReveal from "@/components/ui/ScrollReveal";
+import { sanityClient } from "@/lib/sanity";
 
-const epkItems = [
-  { icon: "📸", title: "Press fotky", desc: "Profi fotografie v tiskové kvalitě" },
-  { icon: "📄", title: "Bio & Rider", desc: "Oficiální bio, tech rider, stage plot" },
-  { icon: "🎨", title: "Logo & Branding", desc: "Logotyp ve všech formátech" },
-  { icon: "📊", title: "Stats & Numbers", desc: "Aktuální čísla ze Spotify a socek" },
+type EpkItem = {
+  _id?: string;
+  title: string;
+  type?: string;
+  description?: string;
+};
+
+const fallbackItems: EpkItem[] = [
+  { title: "Press fotky", description: "Profi fotografie v tiskové kvalitě" },
+  { title: "Bio & Rider", description: "Oficiální bio, tech rider, stage plot" },
+  { title: "Logo & Branding", description: "Logotyp ve všech formátech" },
+  { title: "Stats & Numbers", description: "Aktuální čísla ze Spotify a socek" },
 ];
 
+const iconMap: Record<string, string> = {
+  photo: "📸",
+  document: "📄",
+  logo: "🎨",
+  stats: "📊",
+};
+
 export default function EpkSection() {
+  const [items, setItems] = useState<EpkItem[]>(fallbackItems);
+
+  useEffect(() => {
+    sanityClient
+      .fetch<EpkItem[]>(`*[_type == "epkMaterial"] { _id, title, type, description }`)
+      .then((data) => {
+        if (data && data.length > 0) setItems(data);
+      })
+      .catch(() => {});
+  }, []);
+
   return (
     <section
       className="bg-white py-[100px] px-6 md:px-12 border-t border-[#ddd]"
@@ -28,16 +56,18 @@ export default function EpkSection() {
 
       <ScrollReveal>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          {epkItems.map((item, i) => (
+          {items.map((item, i) => (
             <div
-              key={i}
+              key={item._id || i}
               className="border border-[#ddd] p-7 px-6 flex flex-col gap-4 transition-all duration-300 cursor-pointer hover:border-gold hover:-translate-y-[3px]"
             >
-              <div className="text-[2rem]">{item.icon}</div>
+              <div className="text-[2rem]">
+                {iconMap[item.type || ""] || ["📸", "📄", "🎨", "📊"][i % 4]}
+              </div>
               <h4 className="font-heading text-[0.85rem] font-bold">
                 {item.title}
               </h4>
-              <p className="text-[0.75rem] text-gray">{item.desc}</p>
+              <p className="text-[0.75rem] text-gray">{item.description}</p>
             </div>
           ))}
         </div>
@@ -45,9 +75,12 @@ export default function EpkSection() {
 
       <ScrollReveal>
         <div className="text-center">
-          <button className="bg-gold text-black px-8 py-4 font-heading text-[0.75rem] font-bold uppercase tracking-[0.05em] hover:bg-gold-dark hover:-translate-y-0.5 transition-all inline-flex items-center gap-2">
+          <Link
+            href="/epk"
+            className="bg-gold text-black px-8 py-4 font-heading text-[0.75rem] font-bold uppercase tracking-[0.05em] hover:bg-gold-dark hover:-translate-y-0.5 transition-all inline-flex items-center gap-2"
+          >
             &#11015; STÁHNOUT KOMPLETNÍ EPK
-          </button>
+          </Link>
         </div>
       </ScrollReveal>
     </section>

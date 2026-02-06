@@ -51,7 +51,7 @@ export default function SocialSection() {
             <div
               key={i}
               className={`aspect-square border border-[#ddd] flex items-center justify-center cursor-pointer transition-all duration-500 relative overflow-hidden hover:border-gold hover:scale-[0.97] ${
-                i === 0 ? "col-span-2 row-span-2" : ""
+                i === 0 ? "md:col-span-2 md:row-span-2" : ""
               }`}
               style={{
                 background:

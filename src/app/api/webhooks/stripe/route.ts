@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { prisma } from "@/lib/prisma";
+import { generateQRDataUrl } from "@/lib/qr";
+import { sendVipConfirmation } from "@/lib/email";
 import Stripe from "stripe";
 import crypto from "crypto";
 
@@ -33,7 +35,7 @@ export async function POST(req: NextRequest) {
     if (meta?.type && (meta.type === "MEET_GREET" || meta.type === "BACKSTAGE")) {
       const qrCode = crypto.randomUUID();
 
-      await prisma.vipOrder.create({
+      const order = await prisma.vipOrder.create({
         data: {
           type: meta.type as "MEET_GREET" | "BACKSTAGE",
           name: meta.name || "",
@@ -47,7 +49,21 @@ export async function POST(req: NextRequest) {
         },
       });
 
-      // TODO: Send confirmation email with QR code
+      // Generate QR code and send email
+      try {
+        const qrDataUrl = await generateQRDataUrl(
+          `VIP:${order.id}:${qrCode}`
+        );
+        await sendVipConfirmation({
+          name: meta.name || "",
+          email: meta.email || "",
+          type: meta.type,
+          qrCodeDataUrl: qrDataUrl,
+          concertId: meta.concertId,
+        });
+      } catch (emailErr) {
+        console.error("VIP email error (non-critical):", emailErr);
+      }
     }
   }
 

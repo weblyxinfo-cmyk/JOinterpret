@@ -4,33 +4,61 @@ import { useState } from "react";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 
 const eventTypes = [
-  { icon: "🎤", title: "Klub / Koncert", desc: "Živé vystoupení v klubu nebo na koncertě" },
-  { icon: "🎪", title: "Festival", desc: "Festivalové vystoupení" },
-  { icon: "🎂", title: "Soukromá akce", desc: "Narozeniny, svatby, oslavy" },
-  { icon: "🏢", title: "Firemní event", desc: "Teambuildingy, galavečery" },
+  { icon: "🎤", title: "Klub / Koncert", desc: "Živé vystoupení v klubu nebo na koncertě", type: "CLUB" },
+  { icon: "🎪", title: "Festival", desc: "Festivalové vystoupení", type: "FESTIVAL" },
+  { icon: "🎂", title: "Soukromá akce", desc: "Narozeniny, svatby, oslavy", type: "PRIVATE" },
+  { icon: "🏢", title: "Firemní event", desc: "Teambuildingy, galavečery", type: "CORPORATE" },
 ];
 
 export default function BookingSection() {
   const [activeType, setActiveType] = useState(0);
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-    // TODO: API call
-    await new Promise((r) => setTimeout(r, 1000));
-    setSubmitted(true);
+    setError("");
+
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+
+    try {
+      const res = await fetch("/api/booking", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: eventTypes[activeType].type,
+          name: formData.get("name"),
+          email: formData.get("email"),
+          phone: formData.get("phone"),
+          eventDate: formData.get("eventDate"),
+          location: formData.get("location"),
+          budget: formData.get("budget"),
+          description: formData.get("description"),
+        }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || "Chyba při odesílání.");
+      }
+
+      setSubmitted(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Chyba při odesílání.");
+    }
     setLoading(false);
   };
 
   return (
     <section
-      className="bg-black text-white py-[100px] px-6 md:px-12 relative"
+      className="bg-black text-white py-[100px] px-6 md:px-12 relative overflow-hidden"
       id="booking"
     >
       {/* Ghost text */}
-      <div className="absolute right-[-2%] top-1/2 -translate-y-1/2 font-heading text-[clamp(10rem,20vw,22rem)] font-black ghost-text tracking-[-0.05em] select-none">
+      <div className="absolute right-[-2%] top-1/2 -translate-y-1/2 font-heading text-[clamp(10rem,20vw,22rem)] font-black ghost-text tracking-[-0.05em] select-none hidden md:block">
         BOOK
       </div>
 
@@ -91,12 +119,19 @@ export default function BookingSection() {
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+              {error && (
+                <div className="bg-red-500/10 border border-red-500/30 text-red-400 text-sm px-4 py-3">
+                  {error}
+                </div>
+              )}
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="flex flex-col gap-1.5">
                   <label className="font-mono text-[0.6rem] uppercase tracking-[0.15em] text-gray">
                     Jméno / Organizace
                   </label>
                   <input
+                    name="name"
                     type="text"
                     placeholder="Vaše jméno"
                     required
@@ -108,6 +143,7 @@ export default function BookingSection() {
                     Email
                   </label>
                   <input
+                    name="email"
                     type="email"
                     placeholder="vas@email.cz"
                     required
@@ -122,6 +158,7 @@ export default function BookingSection() {
                     Telefon
                   </label>
                   <input
+                    name="phone"
                     type="tel"
                     placeholder="+420 ..."
                     className="bg-dark border border-[#333] text-white p-3.5 px-4 font-body text-[0.9rem] outline-none focus:border-gold transition-colors"
@@ -132,6 +169,7 @@ export default function BookingSection() {
                     Datum akce
                   </label>
                   <input
+                    name="eventDate"
                     type="date"
                     required
                     className="bg-dark border border-[#333] text-white p-3.5 px-4 font-body text-[0.9rem] outline-none focus:border-gold transition-colors"
@@ -145,6 +183,7 @@ export default function BookingSection() {
                     Místo konání
                   </label>
                   <input
+                    name="location"
                     type="text"
                     placeholder="Město, venue"
                     className="bg-dark border border-[#333] text-white p-3.5 px-4 font-body text-[0.9rem] outline-none focus:border-gold transition-colors"
@@ -154,7 +193,10 @@ export default function BookingSection() {
                   <label className="font-mono text-[0.6rem] uppercase tracking-[0.15em] text-gray">
                     Rozpočet
                   </label>
-                  <select className="bg-dark border border-[#333] text-white p-3.5 px-4 font-body text-[0.9rem] outline-none focus:border-gold transition-colors cursor-pointer">
+                  <select
+                    name="budget"
+                    className="bg-dark border border-[#333] text-white p-3.5 px-4 font-body text-[0.9rem] outline-none focus:border-gold transition-colors cursor-pointer"
+                  >
                     <option>Nechci uvádět</option>
                     <option>do 30 000 Kč</option>
                     <option>30 000 – 60 000 Kč</option>
@@ -169,6 +211,7 @@ export default function BookingSection() {
                   Popis akce
                 </label>
                 <textarea
+                  name="description"
                   placeholder="Popište nám vaši akci – typ, počet lidí, speciální požadavky..."
                   className="bg-dark border border-[#333] text-white p-3.5 px-4 font-body text-[0.9rem] outline-none focus:border-gold transition-colors min-h-[100px] resize-y"
                 />
