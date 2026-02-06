@@ -40,7 +40,7 @@ export default function EpkSection() {
 
   return (
     <section
-      className="bg-white py-[100px] px-6 md:px-12 border-t border-[#ddd]"
+      className="bg-white py-16 md:py-[100px] px-6 md:px-12 border-t border-[#ddd]"
       id="epk"
     >
       <ScrollReveal>

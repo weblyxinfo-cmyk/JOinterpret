@@ -47,7 +47,7 @@ export default function ReferencesSection() {
   }, []);
 
   return (
-    <section className="bg-cream py-[100px] px-6 md:px-12">
+    <section className="bg-cream py-16 md:py-[100px] px-6 md:px-12">
       <ScrollReveal>
         <div className="mb-12">
           <div className="font-mono text-[0.6rem] uppercase tracking-[0.2em] text-gray mb-3">

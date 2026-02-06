@@ -37,11 +37,11 @@ export default function LyricsSection() {
 
   return (
     <section
-      className="bg-black text-white py-[100px] px-6 md:px-12 relative overflow-hidden"
+      className="bg-black text-white py-16 md:py-[100px] px-6 md:px-12 relative overflow-hidden"
       id="lyrics"
     >
       {/* Big quote ghost */}
-      <div className="absolute top-[-120px] left-[-30px] font-heading text-[15rem] md:text-[40rem] text-[#1a1a1a] leading-none pointer-events-none select-none">
+      <div className="absolute top-[-60px] left-[-15px] md:top-[-120px] md:left-[-30px] font-heading text-[10rem] md:text-[40rem] text-[#1a1a1a] leading-none pointer-events-none select-none">
         &ldquo;
       </div>
 

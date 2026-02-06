@@ -55,9 +55,9 @@ const bentoCards = [
 
 export default function BentoAbout() {
   return (
-    <section className="py-[100px] px-6 md:px-12 bg-cream" id="about">
+    <section className="py-16 md:py-[100px] px-6 md:px-12 bg-cream" id="about">
       <ScrollReveal>
-        <div className="flex justify-between items-end mb-12">
+        <div className="flex justify-between items-end mb-8 md:mb-12">
           <h2 className="font-heading text-[clamp(1.8rem,3.5vw,3rem)] font-black tracking-[-0.03em] leading-none">
             O MNĚ{" "}
             <span className="font-mono font-normal text-[0.6em] text-gray">
@@ -68,13 +68,14 @@ export default function BentoAbout() {
       </ScrollReveal>
 
       <ScrollReveal>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 auto-rows-auto md:auto-rows-[240px] gap-4">
+        {/* Mobile: flex column, Tablet+: bento grid */}
+        <div className="flex flex-col gap-4 md:grid md:grid-cols-2 lg:grid-cols-4 md:auto-rows-[240px]">
           {bentoCards.map((card, i) => {
             if (card.type === "image") {
               return (
                 <div
                   key={i}
-                  className={`${card.span} border border-[#ddd] p-5 md:p-7 relative overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] flex flex-col justify-between cursor-pointer hover:border-gold hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(0,0,0,0.08)] ${card.minH}`}
+                  className={`${card.span} border border-[#ddd] p-5 md:p-7 relative overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] flex flex-col justify-between cursor-pointer hover:border-gold hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(0,0,0,0.08)] min-h-[200px] md:min-h-[300px]`}
                   style={{ background: card.bg }}
                 >
                   <span
@@ -90,16 +91,16 @@ export default function BentoAbout() {
               return (
                 <div
                   key={i}
-                  className="bg-black text-white border border-dark p-5 md:p-7 flex flex-col justify-between cursor-pointer transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-gold hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(0,0,0,0.08)] min-h-[180px] md:min-h-0"
+                  className="bg-black text-white border border-dark p-5 md:p-7 flex flex-col justify-between cursor-pointer transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-gold hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(0,0,0,0.08)]"
                 >
                   <span className="font-mono text-[0.6rem] uppercase tracking-[0.15em] opacity-50">
                     {card.tag}
                   </span>
-                  <div>
-                    <div className="font-heading text-[2.5rem] md:text-[3.5rem] font-black leading-none tracking-[-0.04em] text-gold">
+                  <div className="mt-4 md:mt-0">
+                    <div className="font-heading text-[2rem] md:text-[3.5rem] font-black leading-none tracking-[-0.04em] text-gold">
                       {card.number}
                     </div>
-                    <p className="text-[0.85rem] opacity-70 mt-2">
+                    <p className="text-[0.8rem] md:text-[0.85rem] opacity-70 mt-1">
                       {card.desc}
                     </p>
                   </div>
@@ -111,16 +112,16 @@ export default function BentoAbout() {
               return (
                 <div
                   key={i}
-                  className="bg-gold text-black border border-gold p-5 md:p-7 flex flex-col justify-between cursor-pointer transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(0,0,0,0.08)] min-h-[180px] md:min-h-0"
+                  className="bg-gold text-black border border-gold p-5 md:p-7 flex flex-col justify-between cursor-pointer transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(0,0,0,0.08)]"
                 >
                   <span className="font-mono text-[0.6rem] uppercase tracking-[0.15em] text-black/50">
                     {card.tag}
                   </span>
-                  <div>
-                    <h3 className="font-heading text-[1.2rem] font-bold tracking-[-0.02em] leading-tight">
+                  <div className="mt-3 md:mt-0">
+                    <h3 className="font-heading text-[1rem] md:text-[1.2rem] font-bold tracking-[-0.02em] leading-tight">
                       {card.title}
                     </h3>
-                    <p className="text-[0.85rem] mt-2 opacity-70">
+                    <p className="text-[0.8rem] md:text-[0.85rem] mt-1 opacity-70">
                       {card.desc}
                     </p>
                   </div>
@@ -131,30 +132,30 @@ export default function BentoAbout() {
             return (
               <div
                 key={i}
-                className="bg-white border border-[#ddd] p-5 md:p-7 relative overflow-hidden flex flex-col justify-between cursor-pointer transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-gold hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(0,0,0,0.08)] group min-h-[160px] md:min-h-0"
+                className="bg-white border border-[#ddd] p-5 md:p-7 relative overflow-hidden flex flex-col justify-between cursor-pointer transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-gold hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(0,0,0,0.08)] group"
               >
                 <span className="font-mono text-[0.6rem] uppercase tracking-[0.15em] opacity-50">
                   {card.tag}
                 </span>
-                <div>
+                <div className="mt-3 md:mt-0">
                   {card.title && (
-                    <h3 className="font-heading text-[1.2rem] font-bold tracking-[-0.02em] leading-tight">
+                    <h3 className="font-heading text-[1rem] md:text-[1.2rem] font-bold tracking-[-0.02em] leading-tight break-words">
                       {card.title}
                     </h3>
                   )}
                   {card.text && (
-                    <p className="text-[0.85rem] opacity-70 leading-[1.5]">
+                    <p className="text-[0.8rem] md:text-[0.85rem] opacity-70 leading-[1.5]">
                       {card.text}
                     </p>
                   )}
                   {card.desc && (
-                    <p className="text-[0.85rem] opacity-70 mt-2">
+                    <p className="text-[0.8rem] md:text-[0.85rem] opacity-70 mt-1">
                       {card.desc}
                     </p>
                   )}
                 </div>
                 {card.arrow && (
-                  <span className="absolute bottom-5 right-5 text-[1.2rem] opacity-0 translate-x-[-8px] translate-y-[8px] transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 group-hover:translate-y-0">
+                  <span className="absolute bottom-4 right-4 md:bottom-5 md:right-5 text-[1.2rem] opacity-0 translate-x-[-8px] translate-y-[8px] transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 group-hover:translate-y-0">
                     &rarr;
                   </span>
                 )}

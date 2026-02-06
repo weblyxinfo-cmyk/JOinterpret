@@ -54,7 +54,7 @@ export default function BookingSection() {
 
   return (
     <section
-      className="bg-black text-white py-[100px] px-6 md:px-12 relative overflow-hidden"
+      className="bg-black text-white py-16 md:py-[100px] px-6 md:px-12 relative overflow-hidden"
       id="booking"
     >
       {/* Ghost text */}
@@ -217,7 +217,7 @@ export default function BookingSection() {
                 />
               </div>
 
-              <div className="flex justify-between items-center mt-2">
+              <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3 mt-2">
                 <span className="text-[0.75rem] text-gray">
                   Management se ozve do 48 hodin.
                 </span>

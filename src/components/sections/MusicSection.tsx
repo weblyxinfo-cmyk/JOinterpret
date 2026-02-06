@@ -35,7 +35,7 @@ const albums = [
 
 export default function MusicSection() {
   return (
-    <section className="bg-cream py-[100px] px-6 md:px-12" id="music">
+    <section className="bg-cream py-16 md:py-[100px] px-6 md:px-12" id="music">
       <ScrollReveal>
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-12 gap-4">
           <h2 className="font-heading text-[clamp(2rem,3.5vw,3rem)] font-black tracking-[-0.03em]">

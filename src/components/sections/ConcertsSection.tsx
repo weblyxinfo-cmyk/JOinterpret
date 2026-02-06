@@ -45,7 +45,7 @@ export default function ConcertsSection() {
 
   return (
     <section
-      className="bg-white py-[100px] px-6 md:px-12 border-t border-b border-[#ddd]"
+      className="bg-white py-16 md:py-[100px] px-6 md:px-12 border-t border-b border-[#ddd]"
       id="concerts"
     >
       <ScrollReveal>

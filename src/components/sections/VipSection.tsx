@@ -20,7 +20,7 @@ const vipPackages = [
 
 export default function VipSection() {
   return (
-    <section className="bg-cream-dark py-[100px] px-6 md:px-12" id="vip">
+    <section className="bg-cream-dark py-16 md:py-[100px] px-6 md:px-12" id="vip">
       <ScrollReveal>
         <div className="text-center mb-16">
           <div className="font-mono text-[0.6rem] uppercase tracking-[0.2em] text-gray mb-3">
