@@ -1,0 +1,112 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ===== BOOKING SYSTEM =====
+
+enum BookingType {
+  CLUB
+  FESTIVAL
+  PRIVATE
+  CORPORATE
+}
+
+enum BookingStatus {
+  NEW
+  NEGOTIATING
+  CONFIRMED
+  COMPLETED
+  REJECTED
+}
+
+model BookingRequest {
+  id              String        @id @default(cuid())
+  type            BookingType
+  name            String
+  email           String
+  phone           String?
+  eventDate       DateTime
+  location        String?
+  budget          String?
+  description     String?
+  briefFileUrl    String?
+  status          BookingStatus @default(NEW)
+  stripePaymentLink String?
+  isPaid          Boolean       @default(false)
+  addToReferences Boolean       @default(false)
+  notes           BookingNote[]
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+model BookingNote {
+  id        String         @id @default(cuid())
+  bookingId String
+  booking   BookingRequest @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  content   String
+  author    String
+  createdAt DateTime       @default(now())
+}
+
+// ===== VIP SYSTEM =====
+
+enum VipType {
+  MEET_GREET
+  BACKSTAGE
+}
+
+enum VipStatus {
+  PAID
+  USED
+  CANCELLED
+  REFUNDED
+}
+
+model VipOrder {
+  id              String    @id @default(cuid())
+  type            VipType
+  name            String
+  email           String
+  phone           String?
+  concertId       String?
+  persons         Int       @default(1)
+  stripePaymentId String?
+  status          VipStatus @default(PAID)
+  qrCode          String?
+  createdAt       DateTime  @default(now())
+}
+
+// ===== NEWSLETTER =====
+
+model Subscriber {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  subscribedAt DateTime @default(now())
+  source       String?
+}
+
+// ===== SETLIST VOTING =====
+
+model SetlistVote {
+  id         String   @id @default(cuid())
+  songTitle  String
+  eventId    String?
+  voterHash  String
+  createdAt  DateTime @default(now())
+
+  @@unique([songTitle, eventId, voterHash])
+}
+
+// ===== ADMIN USER =====
+
+model AdminUser {
+  id           String  @id @default(cuid())
+  email        String  @unique
+  passwordHash String
+  name         String?
+}

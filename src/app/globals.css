@@ -3,21 +3,63 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --gold: #C6A336;
+  --gold-dark: #A3852B;
+  --cream: #F2EDE4;
+  --cream-dark: #E8E0D2;
+  --black: #111111;
+  --dark: #1A1A1A;
+  --gray: #666666;
+  --gray-light: #999999;
+  --white: #FEFCF9;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-dm-sans), sans-serif;
+  background: var(--cream);
+  color: var(--black);
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--gold);
+  color: white;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--cream);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--gold);
+}
+
+/* Text stroke utility */
+.text-outline {
+  -webkit-text-stroke: 1.5px white;
+  color: transparent;
+}
+
+/* Ghost text for section backgrounds */
+.ghost-text {
+  -webkit-text-stroke: 1px #222;
+  color: transparent;
+  pointer-events: none;
 }
 
 @layer utilities {
