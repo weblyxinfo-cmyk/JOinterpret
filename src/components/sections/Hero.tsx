@@ -56,7 +56,7 @@ export default function Hero() {
         <div
           className="w-full h-full bg-cover bg-center scale-105 hover:scale-100 transition-transform duration-[8s]"
           style={{
-            backgroundImage: `linear-gradient(to bottom, transparent 60%, #111), url('https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=1200&q=80')`,
+            backgroundImage: `linear-gradient(to bottom, transparent 60%, #111), url('/images/hero.jpg')`,
           }}
         />
         {/* Spinning badge */}

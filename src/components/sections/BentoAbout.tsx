@@ -6,7 +6,7 @@ const bentoCards = [
   {
     type: "image",
     span: "md:col-span-2",
-    bg: "url('https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800&q=80') center/cover",
+    bg: "url('/images/about.jpg') center/cover",
     minH: "min-h-[300px]",
     tag: "Zpěvák & Rapper",
     tagStyle: "text-white bg-black/50 inline-block px-3 py-1",

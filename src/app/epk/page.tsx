@@ -26,10 +26,10 @@ type EpkStats = {
   igFollowers?: string;
 };
 
-const fallbackPhotos: EpkMaterial[] = [
-  { title: "Press Photo 1", description: "Hlavní promo fotka", type: "photo" },
-  { title: "Press Photo 2", description: "Live performance", type: "photo" },
-  { title: "Press Photo 3", description: "Studio session", type: "photo" },
+const fallbackPhotos: (EpkMaterial & { image?: string })[] = [
+  { title: "Press Photo 1", description: "Hlavní promo fotka", type: "photo", image: "/images/portrait.jpg" },
+  { title: "Press Photo 2", description: "Studio session", type: "photo", image: "/images/editorial.jpg" },
+  { title: "Press Photo 3", description: "Close-up portrait", type: "photo", image: "/images/closeup.jpg" },
 ];
 
 const fallbackDocuments: EpkMaterial[] = [
@@ -153,23 +153,33 @@ export default function EpkPage() {
             Press fotky (tiskové kvality)
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {photos.map((photo, i) => (
-              <div
-                key={photo._id || i}
-                className="bg-white border border-[#ddd] aspect-[3/4] flex items-center justify-center cursor-pointer hover:border-gold transition-colors group"
-              >
-                <div className="text-center">
-                  <div className="text-4xl mb-2 opacity-30 group-hover:opacity-60 transition-opacity">
-                    📸
+            {photos.map((photo, i) => {
+              const img = (photo as { image?: string }).image;
+              return (
+                <div
+                  key={photo._id || i}
+                  className="bg-white border border-[#ddd] aspect-[3/4] relative overflow-hidden cursor-pointer hover:border-gold transition-colors group"
+                >
+                  {img ? (
+                    <div
+                      className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-500"
+                      style={{ backgroundImage: `url('${img}')` }}
+                    />
+                  ) : (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="text-4xl opacity-30">📸</div>
+                    </div>
+                  )}
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4 pt-12">
+                    <p className="font-heading text-sm font-bold text-white">{photo.title}</p>
+                    <p className="text-[0.75rem] text-white/70">{photo.description}</p>
+                    <span className="font-mono text-[0.6rem] text-gold mt-1 inline-block opacity-0 group-hover:opacity-100 transition-opacity">
+                      &#11015; Stáhnout
+                    </span>
                   </div>
-                  <p className="font-heading text-sm font-bold">{photo.title}</p>
-                  <p className="text-[0.75rem] text-gray">{photo.description}</p>
-                  <span className="font-mono text-[0.6rem] text-gold mt-2 inline-block opacity-0 group-hover:opacity-100 transition-opacity">
-                    &#11015; Stáhnout
-                  </span>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </section>
 
