@@ -61,7 +61,7 @@ export default function Hero() {
         />
         {/* Spinning badge */}
         <div className="absolute top-8 right-8 w-[100px] h-[100px] border-2 border-gold rounded-full flex items-center justify-center font-mono text-[0.55rem] uppercase text-gold leading-[1.4] tracking-[0.1em] animate-spin z-[3] hidden md:flex text-center">
-          250K+
+          91K+
           <br />
           MONTHLY
           <br />

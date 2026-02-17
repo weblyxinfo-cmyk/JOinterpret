@@ -15,7 +15,7 @@ const bentoCards = [
     type: "stat",
     variant: "dark",
     tag: "Monthly listeners",
-    number: "250K+",
+    number: "91K+",
     desc: "Spotify listeners měsíčně",
   },
   {

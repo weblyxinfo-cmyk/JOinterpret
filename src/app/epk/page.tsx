@@ -46,7 +46,7 @@ const fallbackLongBio =
   "Jaroslav Oláh je český R&B zpěvák a rapper. Na českou hudební scénu vstoupil přes soutěž SuperStar, kde zaujal svým hlasem a charismem. Pod hlavičkou Blakkwood Records vydal album Lovestory (2023) s hity jako Nemůžu zapomenout, Hlavolam ft. Refew či Šípková Růženka. Spolupracoval s umělci jako Majself, Jakub Děkan, Daniel Cina a Lola Oláh.";
 
 const fallbackStats = [
-  { value: "250K+", label: "Spotify Listeners" },
+  { value: "91K+", label: "Spotify Listeners" },
   { value: "17", label: "Videoklipů" },
   { value: "1M+", label: "Přehrání" },
   { value: "50K+", label: "IG Followers" },
