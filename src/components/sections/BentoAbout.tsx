@@ -69,13 +69,13 @@ export default function BentoAbout() {
 
       <ScrollReveal>
         {/* Mobile: flex column, Tablet+: bento grid */}
-        <div className="flex flex-col gap-4 md:grid md:grid-cols-2 lg:grid-cols-4 md:auto-rows-[240px]">
+        <div className="flex flex-col gap-4 md:grid md:grid-cols-2 lg:grid-cols-4 md:auto-rows-[minmax(240px,auto)]">
           {bentoCards.map((card, i) => {
             if (card.type === "image") {
               return (
                 <div
                   key={i}
-                  className={`${card.span} border border-[#ddd] p-5 md:p-7 relative overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] flex flex-col justify-between cursor-pointer hover:border-gold hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(0,0,0,0.08)] min-h-[200px] md:min-h-[300px]`}
+                  className={`${card.span} w-full border border-[#ddd] p-5 md:p-7 relative overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] flex flex-col justify-between cursor-pointer hover:border-gold hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(0,0,0,0.08)] min-h-[200px] md:min-h-[300px]`}
                   style={{ background: card.bg }}
                 >
                   <span
@@ -91,7 +91,7 @@ export default function BentoAbout() {
               return (
                 <div
                   key={i}
-                  className="bg-black text-white border border-dark p-5 md:p-7 flex flex-col justify-between cursor-pointer transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-gold hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(0,0,0,0.08)]"
+                  className="w-full bg-black text-white border border-dark p-5 md:p-7 flex flex-col justify-between cursor-pointer transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-gold hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(0,0,0,0.08)]"
                 >
                   <span className="font-mono text-[0.6rem] uppercase tracking-[0.15em] opacity-50">
                     {card.tag}
@@ -112,7 +112,7 @@ export default function BentoAbout() {
               return (
                 <div
                   key={i}
-                  className="bg-gold text-black border border-gold p-5 md:p-7 flex flex-col justify-between cursor-pointer transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(0,0,0,0.08)]"
+                  className="w-full bg-gold text-black border border-gold p-5 md:p-7 flex flex-col justify-between overflow-hidden cursor-pointer transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(0,0,0,0.08)]"
                 >
                   <span className="font-mono text-[0.6rem] uppercase tracking-[0.15em] text-black/50">
                     {card.tag}
@@ -132,7 +132,7 @@ export default function BentoAbout() {
             return (
               <div
                 key={i}
-                className="bg-white border border-[#ddd] p-5 md:p-7 relative overflow-hidden flex flex-col justify-between cursor-pointer transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-gold hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(0,0,0,0.08)] group"
+                className="w-full bg-white border border-[#ddd] p-5 md:p-7 relative overflow-hidden flex flex-col justify-between cursor-pointer transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-gold hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(0,0,0,0.08)] group"
               >
                 <span className="font-mono text-[0.6rem] uppercase tracking-[0.15em] opacity-50">
                   {card.tag}
