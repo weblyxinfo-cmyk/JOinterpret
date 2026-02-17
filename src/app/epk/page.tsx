@@ -40,10 +40,10 @@ const fallbackDocuments: EpkMaterial[] = [
 ];
 
 const fallbackShortBio =
-  "Jaroslav Oláh je český R&B zpěvák a rapper romského původu. Proslavil se účastí v SuperStar a od té doby vydal album Lovestory a řadu hitů s milionovými přehráními. Kromě hudby se věnuje boxu a MMA.";
+  "Jaroslav Oláh je český R&B zpěvák a rapper romského původu. Proslavil se účastí v SuperStar a od té doby vydal album Lovestory a řadu hitů s milionovými přehráními.";
 
 const fallbackLongBio =
-  "Jaroslav Oláh je český R&B zpěvák, rapper a fighter. Na českou hudební scénu vstoupil přes soutěž SuperStar, kde zaujal svým hlasem a charismem. Pod hlavičkou Blakkwood Records vydal album Lovestory (2023) s hity jako Nemůžu zapomenout, Hlavolam ft. Refew či Šípková Růženka. Spolupracoval s umělci jako Majself, Jakub Děkan, Daniel Cina a Lola Oláh. Strávil 10 let v Anglii, kde trénoval box. Má za sebou 11 boxerských zápasů a MMA debut.";
+  "Jaroslav Oláh je český R&B zpěvák a rapper. Na českou hudební scénu vstoupil přes soutěž SuperStar, kde zaujal svým hlasem a charismem. Pod hlavičkou Blakkwood Records vydal album Lovestory (2023) s hity jako Nemůžu zapomenout, Hlavolam ft. Refew či Šípková Růženka. Spolupracoval s umělci jako Majself, Jakub Děkan, Daniel Cina a Lola Oláh.";
 
 const fallbackStats = [
   { value: "250K+", label: "Spotify Listeners" },

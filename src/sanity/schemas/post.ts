@@ -17,7 +17,7 @@ export default defineType({
         list: [
           { title: "Blog", value: "blog" },
           { title: "Behind the Scenes", value: "bts" },
-          { title: "MMA", value: "mma" },
+          { title: "Lifestyle", value: "lifestyle" },
         ],
       },
     }),

@@ -15,7 +15,7 @@ type Reference = {
 };
 
 const fallbackTags = [
-  "I AM FIGHTER",
+  "LOVESTORY ALBUM",
   "GOOUT",
   "LUCERNA MUSIC BAR",
   "SUPERSTAR CZ/SK",
@@ -27,7 +27,7 @@ const fallbackTags = [
 const fallbackEvents: Reference[] = [
   { title: "Budějovický Budvar Event", date: "2024", city: "ČESKÉ BUDĚJOVICE", description: "Headliner · 500+ lidí" },
   { title: "Křest alba Lovestory", date: "2023", city: "PRAHA", description: "Sold out · Live band" },
-  { title: "IAF 3 – MMA Debut", date: "2022", city: "PRAHA", description: "Kongresové centrum" },
+  { title: "GoOut Fest", date: "2022", city: "PRAHA", description: "Letní stage" },
 ];
 
 export default function ReferencesSection() {

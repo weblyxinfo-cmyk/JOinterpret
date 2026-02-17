@@ -54,7 +54,7 @@ const questions = [
 const results = [
   { title: "Hlavolam", desc: "Jsi jako hlavolam – fascinující, komplexní a nedáš se snadno rozluštit. Přitahuješ lidi svou energií!" },
   { title: "Nemůžu zapomenout", desc: "Jsi romantická duše. Cítíš věci hluboce a tvoje emoce jsou tvá největší síla." },
-  { title: "Kriminál", desc: "Jsi fighter! Nevzdáváš se, i když je to těžké. Tvoje odhodlání inspiruje ostatní." },
+  { title: "Kriminál", desc: "Jsi rebel! Nevzdáváš se, i když je to těžké. Tvoje odhodlání inspiruje ostatní." },
   { title: "Táta", desc: "Rodina je pro tebe všechno. Jsi stabilní, spolehlivý/á a máš srdce ze zlata." },
   { title: "Šípková Růženka", desc: "Žiješ naplno a nebojíš se velkých snů. Jsi ambiciózní a víš co chceš!" },
 ];

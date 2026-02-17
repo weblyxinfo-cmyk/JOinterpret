@@ -33,7 +33,6 @@ export default function Navbar() {
           { href: "#concerts", label: "Koncerty" },
           { href: "#vip", label: "VIP" },
           { href: "#lyrics", label: "Texty" },
-          { href: "#mma", label: "MMA" },
           { href: "#epk", label: "EPK" },
         ].map((link) => (
           <a
@@ -83,7 +82,6 @@ export default function Navbar() {
             { href: "#concerts", label: "Koncerty" },
             { href: "#vip", label: "VIP" },
             { href: "#lyrics", label: "Texty" },
-            { href: "#mma", label: "MMA" },
             { href: "#epk", label: "EPK" },
             { href: "#booking", label: "Booking" },
           ].map((link) => (

@@ -22,7 +22,7 @@ export default function Hero() {
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         >
           <div className="font-mono text-[0.65rem] uppercase tracking-[0.2em] text-gold mb-6">
-            Singer / Rapper / Fighter
+            Singer / Rapper
           </div>
           <h1 className="font-heading text-[clamp(3rem,6vw,5.5rem)] font-black leading-[0.9] tracking-[-0.04em] mb-8">
             JAROSLAV
@@ -32,7 +32,7 @@ export default function Hero() {
           </h1>
           <p className="text-[1rem] text-gray-light max-w-[420px] leading-[1.7] font-light mb-10">
             R&B, rap a nekompromisní energie. Od SuperStar přes milionové
-            přehrání až do MMA klece.
+            přehrání až na největší pódia.
           </p>
           <div className="flex gap-3 flex-wrap">
             <a

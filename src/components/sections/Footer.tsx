@@ -8,7 +8,7 @@ export default function Footer() {
             JAROSLAV <span className="text-gold">OLÁH</span>
           </div>
           <p className="text-[0.85rem] text-gray leading-[1.6] max-w-[280px]">
-            Zpěvák, rapper, fighter. Hudba co rezonuje, energie co se
+            Zpěvák, rapper. Hudba co rezonuje, energie co se
             nezapomíná.
           </p>
         </div>

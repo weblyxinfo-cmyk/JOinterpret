@@ -26,7 +26,7 @@ const spaceMono = Space_Mono({
 export const metadata: Metadata = {
   title: "JAROSLAV OLÁH — Official",
   description:
-    "Jaroslav Oláh – český R&B zpěvák, rapper a fighter. Booking, koncerty, VIP experience.",
+    "Jaroslav Oláh – český R&B zpěvák a rapper. Booking, koncerty, VIP experience.",
   keywords: [
     "Jaroslav Oláh",
     "rapper",
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "JAROSLAV OLÁH — Official",
     description:
-      "R&B, rap a nekompromisní energie. Od SuperStar přes milionové přehrání až do MMA klece.",
+      "R&B, rap a nekompromisní energie. Od SuperStar přes milionové přehrání až na největší pódia.",
     type: "website",
   },
 };

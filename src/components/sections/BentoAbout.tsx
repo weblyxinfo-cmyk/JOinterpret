@@ -34,9 +34,9 @@ const bentoCards = [
   {
     type: "highlight",
     variant: "gold",
-    tag: "Fighter",
-    title: "11 boxerských zápasů + MMA debut",
-    desc: "10 let tréninku v Anglii",
+    tag: "Kariéra",
+    title: "Album Lovestory + milionové přehrání",
+    desc: "Blakkwood Records",
   },
   {
     type: "text",

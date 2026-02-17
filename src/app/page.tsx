@@ -9,7 +9,7 @@ import LyricsSection from "@/components/sections/LyricsSection";
 import FanZone from "@/components/sections/FanZone";
 import EpkSection from "@/components/sections/EpkSection";
 import ReferencesSection from "@/components/sections/ReferencesSection";
-import MmaSection from "@/components/sections/MmaSection";
+
 import SocialSection from "@/components/sections/SocialSection";
 import Footer from "@/components/sections/Footer";
 
@@ -27,7 +27,7 @@ export default function Home() {
       <FanZone />
       <EpkSection />
       <ReferencesSection />
-      <MmaSection />
+
       <SocialSection />
       <Footer />
     </>
