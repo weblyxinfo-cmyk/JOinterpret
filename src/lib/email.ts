@@ -1,6 +1,8 @@
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resend = process.env.RESEND_API_KEY
+  ? new Resend(process.env.RESEND_API_KEY)
+  : null;
 
 const FROM_EMAIL = "Jaroslav Oláh <noreply@jaroslavolah.cz>";
 const MANAGER_EMAIL = process.env.MANAGER_EMAIL || "management@jaroslavolah.cz";
@@ -18,6 +20,7 @@ export async function sendBookingConfirmation(data: {
     CORPORATE: "Firemní event",
   };
 
+  if (!resend) return;
   await resend.emails.send({
     from: FROM_EMAIL,
     to: data.email,
@@ -46,6 +49,7 @@ export async function sendBookingNotification(data: {
   budget?: string | null;
   id: string;
 }) {
+  if (!resend) return;
   await resend.emails.send({
     from: FROM_EMAIL,
     to: MANAGER_EMAIL,
@@ -76,6 +80,7 @@ export async function sendVipConfirmation(data: {
 }) {
   const typeLabel = data.type === "MEET_GREET" ? "Meet & Greet" : "Backstage Pass";
 
+  if (!resend) return;
   await resend.emails.send({
     from: FROM_EMAIL,
     to: data.email,
