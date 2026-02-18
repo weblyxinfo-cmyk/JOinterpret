@@ -12,7 +12,11 @@ function AdminSidebar() {
     { href: "/admin", label: "Dashboard", icon: "📊" },
     { href: "/admin/booking", label: "Booking", icon: "📋" },
     { href: "/admin/vip", label: "VIP Objednávky", icon: "⭐" },
+    { href: "/admin/concerts", label: "Koncerty", icon: "🎤" },
+    { href: "/admin/music", label: "Diskografie", icon: "💿" },
     { href: "/admin/setlist", label: "Setlist Hlasování", icon: "🎵" },
+    { href: "/admin/setlist/songs", label: "Správa písní", icon: "🎶" },
+    { href: "/admin/social", label: "Sociální sítě", icon: "📱" },
   ];
 
   return (

@@ -110,3 +110,50 @@ model AdminUser {
   passwordHash String
   name         String?
 }
+
+// ===== API STAT CACHE =====
+
+model ApiStatCache {
+  id        String   @id @default(cuid())
+  service   String   // "spotify", "youtube"
+  key       String   // "artist", "albums", "channel", "videos", "monthlyListeners"
+  value     Json
+  expiresAt DateTime
+  updatedAt DateTime @updatedAt
+
+  @@unique([service, key])
+}
+
+// ===== SETLIST SONG POOL =====
+
+model SetlistSong {
+  id        String   @id @default(cuid())
+  title     String   @unique
+  isActive  Boolean  @default(true)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+}
+
+// ===== SOCIAL LINKS =====
+
+model SocialLink {
+  id            String  @id @default(cuid())
+  platform      String  @unique // "instagram", "tiktok", "youtube", "spotify", "podcast"
+  url           String?
+  followerCount String? // "50K+", "91K+" etc.
+  isVisible     Boolean @default(true)
+}
+
+// ===== ALBUM / DISCOGRAPHY =====
+
+model AlbumOverride {
+  id         String  @id @default(cuid())
+  spotifyId  String? @unique
+  title      String
+  year       String
+  type       String  @default("ALBUM") // "ALBUM", "EP", "SINGLE", "ALBUM · LIVE"
+  coverUrl   String?
+  spotifyUrl String?
+  sortOrder  Int     @default(0)
+  isVisible  Boolean @default(true)
+}

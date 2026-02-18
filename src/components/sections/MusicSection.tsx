@@ -1,8 +1,20 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 
-const albums = [
+type AlbumData = {
+  id?: string;
+  year: string;
+  type: string;
+  title: string;
+  coverUrl?: string | null;
+  cover?: string;
+  spotifyUrl?: string | null;
+  url?: string;
+};
+
+const fallbackAlbums = [
   {
     year: "2025",
     type: "ALBUM",
@@ -34,6 +46,29 @@ const albums = [
 ];
 
 export default function MusicSection() {
+  const [albums, setAlbums] = useState<AlbumData[]>(fallbackAlbums);
+  const [listeners, setListeners] = useState("91K+");
+
+  useEffect(() => {
+    // Fetch albums from DB
+    fetch("/api/music")
+      .then((r) => r.json())
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) {
+          setAlbums(data);
+        }
+      })
+      .catch(() => {});
+
+    // Fetch monthly listeners
+    fetch("/api/stats/spotify?type=monthlyListeners")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data?.value) setListeners(data.value);
+      })
+      .catch(() => {});
+  }, []);
+
   return (
     <section className="bg-cream py-16 md:py-[100px] px-6 md:px-12" id="music">
       <ScrollReveal>
@@ -43,17 +78,20 @@ export default function MusicSection() {
           </h2>
           <div className="flex items-center gap-2 font-mono text-[0.7rem] text-[#1DB954] bg-[rgba(29,185,84,0.08)] px-4 py-2 border border-[rgba(29,185,84,0.2)]">
             <div className="w-2 h-2 bg-[#1DB954] rounded-full animate-pulse" />
-            91K+ MONTHLY LISTENERS
+            {listeners} MONTHLY LISTENERS
           </div>
         </div>
       </ScrollReveal>
 
       <ScrollReveal>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
-          {albums.map((album, i) => (
+          {albums.map((album, i) => {
+            const cover = album.coverUrl || album.cover || "";
+            const url = album.spotifyUrl || album.url || "#";
+            return (
             <a
-              key={i}
-              href={album.url}
+              key={album.id || i}
+              href={url}
               target="_blank"
               rel="noopener noreferrer"
               className="relative cursor-pointer group block"
@@ -61,7 +99,7 @@ export default function MusicSection() {
               <div className="aspect-square relative overflow-hidden mb-4">
                 <div
                   className="w-full h-full bg-cover bg-center transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.06]"
-                  style={{ backgroundImage: `url('${album.cover}')` }}
+                  style={{ backgroundImage: `url('${cover}')` }}
                 />
                 <div className="absolute inset-0 bg-gold/[0.88] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <div className="font-heading text-[0.7rem] text-black font-bold uppercase tracking-[0.1em] border-2 border-black px-6 py-3">
@@ -76,7 +114,8 @@ export default function MusicSection() {
                 {album.title}
               </div>
             </a>
-          ))}
+            );
+          })}
         </div>
       </ScrollReveal>
     </section>

@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 
-const allSongs = [
+const fallbackSongs = [
   "Nemůžu zapomenout",
   "Hlavolam ft. Refew",
   "Šípková Růženka",
@@ -15,10 +15,22 @@ const allSongs = [
 ];
 
 export default function SetlistPage() {
+  const [allSongs, setAllSongs] = useState<string[]>(fallbackSongs);
   const [selected, setSelected] = useState<string[]>([]);
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    fetch("/api/setlist/songs")
+      .then((r) => r.json())
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) {
+          setAllSongs(data.map((s: { title: string }) => s.title));
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   const toggleSong = (song: string) => {
     if (submitted) return;

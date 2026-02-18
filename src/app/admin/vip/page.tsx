@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 
 const statusColors: Record<string, string> = {
   PAID: "bg-green-500/20 text-green-400 border-green-500/30",
@@ -75,13 +76,14 @@ export default function AdminVipPage() {
 
       {/* Table */}
       <div className="bg-[#111] border border-[#222]">
-        <div className="grid grid-cols-[1fr_1fr_80px_100px_100px_80px] gap-4 px-6 py-3 border-b border-[#222] font-mono text-[0.6rem] uppercase tracking-wider text-gray">
+        <div className="grid grid-cols-[1fr_1fr_80px_100px_100px_80px_60px] gap-4 px-6 py-3 border-b border-[#222] font-mono text-[0.6rem] uppercase tracking-wider text-gray">
           <span>Jméno</span>
           <span>Typ</span>
           <span>Osoby</span>
           <span>Status</span>
           <span>Datum</span>
           <span>QR</span>
+          <span></span>
         </div>
 
         {loading ? (
@@ -98,7 +100,7 @@ export default function AdminVipPage() {
           filtered.map((o) => (
             <div
               key={o.id}
-              className="grid grid-cols-[1fr_1fr_80px_100px_100px_80px] gap-4 px-6 py-4 border-b border-[#222] hover:bg-white/[0.02] items-center"
+              className="grid grid-cols-[1fr_1fr_80px_100px_100px_80px_60px] gap-4 px-6 py-4 border-b border-[#222] hover:bg-white/[0.02] items-center"
             >
               <div>
                 <div className="text-sm font-medium">{o.name}</div>
@@ -121,6 +123,12 @@ export default function AdminVipPage() {
               <span className="text-[0.65rem] font-mono text-gray truncate">
                 {o.qrCode ? o.qrCode.slice(0, 8) + "..." : "—"}
               </span>
+              <Link
+                href={`/admin/vip/${o.id}`}
+                className="text-gold text-[0.65rem] font-mono hover:underline"
+              >
+                Detail
+              </Link>
             </div>
           ))
         )}

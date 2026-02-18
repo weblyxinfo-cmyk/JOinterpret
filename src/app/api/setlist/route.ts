@@ -4,7 +4,7 @@ import crypto from "crypto";
 
 export const dynamic = "force-dynamic";
 
-const songs = [
+const fallbackSongs = [
   "Nemůžu zapomenout",
   "Hlavolam ft. Refew",
   "Šípková Růženka",
@@ -19,6 +19,18 @@ export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const eventId = searchParams.get("eventId") || "default";
+
+    // Fetch active songs from DB, fallback to hardcoded
+    let songs: string[];
+    try {
+      const dbSongs = await prisma.setlistSong.findMany({
+        where: { isActive: true },
+        orderBy: { sortOrder: "asc" },
+      });
+      songs = dbSongs.length > 0 ? dbSongs.map((s) => s.title) : fallbackSongs;
+    } catch {
+      songs = fallbackSongs;
+    }
 
     const votes = await prisma.setlistVote.groupBy({
       by: ["songTitle"],
